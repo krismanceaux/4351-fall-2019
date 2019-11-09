@@ -27,9 +27,22 @@ app.get('/', (req, res) => {
   res.json('Default route');
 });
 
-app.post('/rolelink', (req, res) => {
+// roleLink gets list of links assigned to a specific role
+app.post('/roleLink', (req, res) => {
   const { role } = req.body;
   const command = `SELECT * FROM roleLink WHERE role = '${role}'`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ result });
+    }
+  });
+});
+
+app.post('/signup', (req, res) => {
+  const { firstName, lastName, role } = req.body;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, role) VALUES ('${firstName}', '${lastName}', '${role}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
