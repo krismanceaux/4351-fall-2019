@@ -4,7 +4,6 @@ import {
   Select,
   MenuItem,
   TextField,
-  FormHelperText,
   InputLabel
 } from '@material-ui/core';
 
