@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Form from './Pages/Form';
+import SignUp from './Pages/SignUp';
+import ModifyRoles from './Pages/ModifyRoles';
 import Login from './Pages/Login';
 import Header from './components/Header';
-import './App.css';
 
 const App = () => {
   return (
@@ -12,8 +12,10 @@ const App = () => {
       <div className="AppBody">
         <Header />
         <Switch>
-          <Route path="/form" component={Form} />
+          <Route path="/signup" component={SignUp} />
           <Route path="/login" component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path="/modify" component={ModifyRoles} />
         </Switch>
       </div>
     </Router>

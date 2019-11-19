@@ -1,7 +1,7 @@
 const defaultFormData = {
   firstName: '',
   lastName: '',
-  role: '',
+  role: null,
   username: '',
   password: ''
 };

@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Form = () => {
+const SignUp = () => {
   const classes = useStyles();
 
   const [formData, setFormData] = useState(defaultFormData);
@@ -93,4 +93,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default SignUp;

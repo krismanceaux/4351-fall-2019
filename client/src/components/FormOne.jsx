@@ -19,7 +19,7 @@ const FormOne = props => {
             required
             fullWidth
             id="firstName"
-            label="Last Name"
+            label="First Name"
             value={formData.firstName}
             onChange={handleChange}
           />
@@ -36,27 +36,6 @@ const FormOne = props => {
             onChange={handleChange}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <InputLabel id="selectRole">Role</InputLabel>
-          <Select
-            labelId="selectRole"
-            id="demo-simple-select"
-            id="selectRole"
-            label="Select role"
-            value={formData.role}
-            onChange={e =>
-              handleChange({
-                target: { id: 'role', value: e.target.value }
-              })
-            }
-          >
-            <MenuItem value={'FINANCE_ADMIN'}>Finance Admin</MenuItem>
-            <MenuItem value={'ENGG_ADMIN'}>Engineering Admin</MenuItem>
-            <MenuItem value={'SALES_ADMIN'}>Sales Admin</MenuItem>
-            <MenuItem value={'HR_ADMIN'}>HR Admin</MenuItem>
-          </Select>
-        </Grid>
-
         <Grid item xs={12}>
           <TextField
             variant="outlined"

@@ -40,9 +40,32 @@ app.post('/roleLink', (req, res) => {
   });
 });
 
-app.post('/signup', (req, res) => {
-  const { firstName, lastName, role } = req.body;
-  const command = `INSERT INTO admin_portal.person (firstName, lastName, role) VALUES ('${firstName}', '${lastName}', '${role}')`;
+app.post('/signUp', (req, res) => {
+  const { firstName, lastName, role, username } = req.body;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', '${role}', '${username}')`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ result });
+    }
+  });
+});
+
+app.get('/userInfo', (req, res) => {
+  const command = `SELECT id, firstName, lastName, role FROM person`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ personList: result });
+    }
+  });
+});
+
+app.post('/modifyRole', (req, res) => {
+  const { id, role } = req.body;
+  const command = `UPDATE person SET person.role = '${role}' WHERE person.id = ${id}`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
