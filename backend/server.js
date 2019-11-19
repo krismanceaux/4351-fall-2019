@@ -28,14 +28,25 @@ app.get('/', (req, res) => {
 });
 
 // roleLink gets list of links assigned to a specific role
-app.post('/roleLink', (req, res) => {
+app.post('/roleLinks', (req, res) => {
   const { role } = req.body;
   const command = `SELECT * FROM roleLink WHERE role = '${role}'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
     } else {
-      return res.json({ result });
+      return res.json({ roleLinks: result });
+    }
+  });
+});
+
+app.get('/globalLinks', (req, res) => {
+  const command = `SELECT * FROM roleLink WHERE role = 'GLOBAL' ORDER BY role ASC`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ globalLinks: result });
     }
   });
 });

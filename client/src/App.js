@@ -4,6 +4,7 @@ import SignUp from './Pages/SignUp';
 import ModifyRoles from './Pages/ModifyRoles';
 import Login from './Pages/Login';
 import Header from './components/Header';
+import Home from './Pages/Home';
 
 const App = () => {
   return (
@@ -12,8 +13,8 @@ const App = () => {
       <div className="AppBody">
         <Header />
         <Switch>
+          <Route exact path="/" component={Home} />
           <Route path="/signup" component={SignUp} />
-          <Route path="/login" component={Login} />
           <Route path="/login" component={Login} />
           <Route path="/modify" component={ModifyRoles} />
         </Switch>

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Grid,
-  Select,
-  MenuItem,
-  TextField,
-  InputLabel
-} from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 
 const FormOne = props => {
   const { formData, handleChange } = props;
