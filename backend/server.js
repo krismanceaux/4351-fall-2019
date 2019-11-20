@@ -64,7 +64,7 @@ app.post('/signUp', (req, res) => {
 });
 
 app.get('/userInfo', (req, res) => {
-  const command = `SELECT id, firstName, lastName, role FROM person`;
+  const command = `SELECT id, firstName, lastName, role FROM person WHERE role != 'SUPER_ADMIN'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
