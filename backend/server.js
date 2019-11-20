@@ -86,4 +86,18 @@ app.post('/modifyRole', (req, res) => {
   });
 });
 
+app.post('/login', (req, res) => {
+  const { userName, password } = req.body;
+  const command = `SELECT * FROM person WHERE userName='${userName}' AND password='${password}'`;
+  connection.query(command, (err, result) => {
+    if (result.length === 0) {
+      return res.json({
+        status: 0
+      });
+    } else {
+      return res.json(result[0]);
+    }
+  });
+});
+
 app.listen(5000, () => 'Server started on port 5000');
