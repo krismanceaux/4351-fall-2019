@@ -5,7 +5,7 @@ The admin portal should be a web application with working front-end and back-end
 - sign in
 - homepage
 - links 
-- You should use proper form validations and display error messages in case of any failure. - 
+- You should use proper form validations and display error messages in case of any failure.
 - create different admins 
 - add, remove and modify an admin role 
 - add, remove and modify links for admin portal 
