@@ -1,7 +1,7 @@
 import React, { useState, Component } from 'react';
 import UserCard from '../components/UserCard';
 
-class ModifyRoles extends Component {
+class AssignRoles extends Component {
   state = {
     personList: []
   };
@@ -22,4 +22,4 @@ class ModifyRoles extends Component {
   }
 }
 
-export default ModifyRoles;
+export default AssignRoles;

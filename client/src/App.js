@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import SignUp from './Pages/SignUp';
-import ModifyRoles from './Pages/ModifyRoles';
+import AssignRoles from './Pages/AssignRoles';
 import Login from './Pages/Login';
 import Header from './components/Header';
 import Home from './Pages/Home';
@@ -16,7 +16,7 @@ const App = () => {
           <Route exact path="/" component={Login} />
           <Route path="/signup" component={SignUp} />
           <Route path="/home" component={Home} />
-          <Route path="/modify" component={ModifyRoles} />
+          <Route path="/assign" component={AssignRoles} />
         </Switch>
       </div>
     </Router>

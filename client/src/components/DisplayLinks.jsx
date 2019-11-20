@@ -7,14 +7,15 @@ class DisplayLinks extends Component {
     super(props);
     this.state = {
       roleLink: props.global.roleLink,
-      globalLink: props.global.roleLink
+      globalLink: props.global.roleLink,
+      actualLink: props.global.actualLink
     };
   }
 
   render() {
     return (
       <Grid item>
-        <a href="">
+        <a href={this.state.actualLink}>
           <Paper style={{ height: '100%', width: '100%' }}>
             {this.state.globalLink}
           </Paper>
