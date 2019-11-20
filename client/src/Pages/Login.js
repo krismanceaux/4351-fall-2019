@@ -68,7 +68,7 @@ class Login extends Component {
 
   render() {
     if (this.state.output === 1 && this.state.role !== undefined) {
-      window.location.replace('/');
+      window.location.replace('/home');
     }
     return (
       <React.Fragment>

@@ -14,33 +14,14 @@ class Header extends Component {
     id: localStorage.getItem('id')
   };
 
-  LogOut() {
+  logOut() {
     localStorage.clear();
     this.setState({ isLoggedIn: null, role: null, id: null });
-    window.location.replace('/login');
+    window.location.replace('/');
   }
 
-  actionButton() {
-    if (localStorage.getItem('isLoggedIn') === true) {
-      return (
-        <Button
-          style={{ color: 'white', border: '2px solid red' }}
-          onClick={this.LogOut}
-        >
-          Logout
-        </Button>
-      );
-    } else {
-      return (
-        <Link href="/login">
-          <Button style={{ color: 'white', border: '2px solid white' }}>
-            Login
-          </Button>
-        </Link>
-      );
-    }
-  }
   render() {
+    const isLoggedIn = this.state.isLoggedIn;
     return (
       <div style={{ flexGrow: '1', marginBottom: '40px' }}>
         <AppBar position="static">
@@ -56,7 +37,20 @@ class Header extends Component {
             <Typography variant="h6" style={{ flexGrow: '1' }}>
               Admin Portal
             </Typography>
-            {this.actionButton()}
+            {isLoggedIn ? (
+              <Button
+                style={{ color: 'white', border: '2px solid red' }}
+                onClick={() => this.logOut()}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Link href="/login">
+                <Button style={{ color: 'white', border: '2px solid white' }}>
+                  Login
+                </Button>
+              </Link>
+            )}
           </Toolbar>
         </AppBar>
       </div>
