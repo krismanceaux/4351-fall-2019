@@ -22,7 +22,6 @@ class Header extends Component {
 
   render() {
     const isLoggedIn = this.state.isLoggedIn;
-    const isSuper = this.state.role === 'SUPER_ADMIN';
     return (
       <div style={{ flexGrow: '1', marginBottom: '40px' }}>
         <AppBar position="static">

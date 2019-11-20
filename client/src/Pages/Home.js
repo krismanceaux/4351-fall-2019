@@ -10,13 +10,15 @@ class Home extends Component {
     this.state = {
       roleLinks: [],
       globalLinks: [],
-      role: localStorage.getItem('role')
+      role: localStorage.getItem('role'),
+      formattedRole: ''
     };
   }
 
   componentDidMount() {
     this.getGlobalLinks();
     this.getRoleLinks();
+    this.fixRole();
   }
 
   getRoleLinks() {
@@ -39,6 +41,26 @@ class Home extends Component {
       .then(res => res.json())
       .then(result => this.setState({ globalLinks: result.globalLinks }))
       .catch(err => console.log(err));
+  }
+
+  fixRole() {
+    switch (this.state.role) {
+      case 'FINANCE_ADMIN':
+        this.setState({ formattedRole: 'Finance' });
+        break;
+      case 'HR_ADMIN':
+        this.setState({ formattedRole: 'HR' });
+        break;
+      case 'SALES_ADMIN':
+        this.setState({ formattedRole: 'Sales' });
+        break;
+      case 'ENGG_ADMIN':
+        this.setState({ formattedRole: 'Engineering' });
+        break;
+
+      default:
+        break;
+    }
   }
 
   render() {
