@@ -32,6 +32,7 @@ const FormOne = props => {
         </Grid>
         <Grid item xs={12}>
           <TextField
+            style={{ marginBottom: '20px' }}
             variant="outlined"
             required
             fullWidth
