@@ -63,6 +63,20 @@ app.post('/signUp', (req, res) => {
   });
 });
 
+app.get('/getRoles', (req, res) => {
+  const command = `SELECT DISTINCT RL.role, roleName
+  FROM roleLink RL, roleName RN
+  where RL.role != 'SUPER_ADMIN' AND RL.role != 'GLOBAL'
+  AND RL.role = RN.role`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ roleList: result });
+    }
+  });
+});
+
 app.get('/userInfo', (req, res) => {
   const command = `SELECT id, firstName, lastName, role FROM person WHERE role != 'SUPER_ADMIN'`;
   connection.query(command, (err, result) => {

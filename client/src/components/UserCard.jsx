@@ -19,6 +19,7 @@ class UserCard extends Component {
       firstName: props.list.firstName,
       lastName: props.list.lastName,
       role: props.list.role,
+      roleList: [],
       formattedRole: '',
       isOpen: false,
       isSuccess: false
@@ -51,6 +52,16 @@ class UserCard extends Component {
 
   componentDidMount() {
     this.fixRole();
+    this.getRoles();
+  }
+
+  getRoles() {
+    fetch(`http://localhost:5000/getRoles`, {
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(result => this.setState({ roleList: result.roleList }))
+      .catch(err => console.log(err));
   }
 
   handleSubmit = () => {
@@ -100,30 +111,14 @@ class UserCard extends Component {
                     row
                     value={this.state.role}
                   >
-                    <FormControlLabel
-                      value="FINANCE_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Finance"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="ENGG_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Engineering"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="HR_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Human Resources"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="SALES_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Sales"
-                      labelPlacement="top"
-                    />
+                    {this.state.roleList.map(obj => (
+                      <FormControlLabel
+                        value={obj.role}
+                        control={<Radio color="primary" />}
+                        label={obj.roleName}
+                        labelPlacement="top"
+                      />
+                    ))}
                   </RadioGroup>
                 </FormControl>
               </Grid>
