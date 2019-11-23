@@ -1,24 +1,24 @@
 import React, { useState, Component } from 'react';
-import RoleCard from '../components/RoleCard';
+import AdminCard from '../components/AdminCard';
 
 class AdminRoles extends Component {
   state = {
-      roleList: []
+    adminList: []
   };
 
   componentDidMount() {
-    fetch(`http://localhost:5000/getRoleName`, {
+    fetch(`http://localhost:5000/getAdminName`, {
       method: 'GET'
     })
       .then(res => res.json())
-      .then(result => this.setState({ roleList: result.roleList }))
+      .then(result => this.setState({ adminList: result.adminList }))
       .catch(err => console.log(err));
   }
 
   render() {
-    return this.state.roleList.map(role => (
-        <RoleCard role={{ ...role}}/>
-    ))
+    return this.state.adminList.map(admin => (
+      <AdminCard admin={{ ...admin }} />
+    ));
   }
 }
 

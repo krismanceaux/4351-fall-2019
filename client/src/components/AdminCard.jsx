@@ -11,35 +11,30 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 
-class RoleCard extends Component {
+class AdminCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        role: props.role.role,
-        roleName: props.role.roleName
+      admin: props.admin.adminType
     };
   }
-  
 
   render() {
     return (
-        <div style={{ width: '90%', margin: 'auto' }}>
+      <div style={{ width: '90%', margin: 'auto' }}>
         <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-        
             <Grid container>
-                <Grid item xs={12}></Grid>
-            <Typography>{this.state.role}</Typography>
-          </Grid>
-            </ExpansionPanelSummary>
+              <Grid item xs={12}></Grid>
+              <Typography>{this.state.admin}</Typography>
+            </Grid>
+          </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>
-              blah
-            </Typography>
+            <Typography>blah</Typography>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
@@ -47,4 +42,4 @@ class RoleCard extends Component {
   }
 }
 
-export default RoleCard;
+export default AdminCard;
