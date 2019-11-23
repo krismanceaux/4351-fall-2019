@@ -114,4 +114,27 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/addToRoleList', (req, res) => {
+  const { id, role } = req.body;
+  const command = `INSERT INTO admin_portal.roleName (role, roleName) values ('${id}', '${role}')`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ result });
+    }
+  });
+});
+
+app.get('/getRoleName', (req, res) => {
+  const command = `SELECT role, roleName FROM roleName`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ roleList: result });
+    }
+  });
+});
+
 app.listen(5000, () => 'Server started on port 5000');
