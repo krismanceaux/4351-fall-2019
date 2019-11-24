@@ -64,10 +64,9 @@ app.post('/signUp', (req, res) => {
 });
 
 app.get('/getRoles', (req, res) => {
-  const command = `SELECT DISTINCT RL.role, roleName
-  FROM roleLink RL, roleName RN
-  where RL.role != 'SUPER_ADMIN' AND RL.role != 'GLOBAL'
-  AND RL.role = RN.role`;
+  const command = `SELECT * 
+  FROM admin_portal.roleName
+  WHERE id NOT IN (1, 6)`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -78,7 +77,9 @@ app.get('/getRoles', (req, res) => {
 });
 
 app.get('/userInfo', (req, res) => {
-  const command = `SELECT id, firstName, lastName, role FROM person WHERE role != 'SUPER_ADMIN'`;
+  const command = `SELECT *
+  FROM person
+  WHERE role != 'Super'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -90,7 +91,10 @@ app.get('/userInfo', (req, res) => {
 
 app.post('/modifyRole', (req, res) => {
   const { id, role } = req.body;
-  const command = `UPDATE person SET person.role = '${role}' WHERE person.id = ${id}`;
+  const command = `UPDATE person
+  SET person.role = '${role}',
+  person.roleID = (SELECT id from roleName where roleName = 'Engineering')
+  WHERE person.id = ${id}`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });

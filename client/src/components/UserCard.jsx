@@ -113,7 +113,7 @@ class UserCard extends Component {
                   >
                     {this.state.roleList.map(obj => (
                       <FormControlLabel
-                        value={obj.role}
+                        value={obj.roleName}
                         control={<Radio color="primary" />}
                         label={obj.roleName}
                         labelPlacement="top"
