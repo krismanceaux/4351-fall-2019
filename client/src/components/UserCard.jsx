@@ -79,7 +79,7 @@ class UserCard extends Component {
 
   render() {
     return (
-      <div style={{ width: '90%', margin: 'auto' }}>
+      <div style={{ width: '90%', margin: 'auto', marginBottom: '20px' }}>
         <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
