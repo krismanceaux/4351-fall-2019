@@ -132,9 +132,9 @@ app.post('/login', (req, res) => {
   });
 });
 
-app.post('/addToRoleList', (req, res) => {
-  const { id, role } = req.body;
-  const command = `INSERT INTO admin_portal.roleName (role, roleName) values ('${id}', '${role}')`;
+app.post('/addToAdminList', (req, res) => {
+  const { adminType } = req.body;
+  const command = `INSERT INTO admin_portal.admin (adminType) values ('${adminType}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -144,13 +144,13 @@ app.post('/addToRoleList', (req, res) => {
   });
 });
 
-app.get('/getRoleName', (req, res) => {
-  const command = `SELECT role, roleName FROM roleName`;
+app.get('/getAdminName', (req, res) => {
+  const command = `SELECT * FROM admin`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
     } else {
-      return res.json({ roleList: result });
+      return res.json({ adminList: result });
     }
   });
 });
