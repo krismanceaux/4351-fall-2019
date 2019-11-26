@@ -53,7 +53,7 @@ app.get('/globalLinks', (req, res) => {
 
 app.post('/signUp', (req, res) => {
   const { firstName, lastName, role, username } = req.body;
-  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', '${role}', '${username}')`;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', NULL, '${username}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -77,9 +77,10 @@ app.get('/getRoles', (req, res) => {
 });
 
 app.get('/userInfo', (req, res) => {
-  const command = `SELECT *
+  const command = `SELECT id, firstName, lastName, role, userName
   FROM person
-  WHERE role != 'Super'`;
+  WHERE role != 'Super'
+  OR ISNULL(role)`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });

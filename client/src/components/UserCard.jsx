@@ -95,6 +95,17 @@ class UserCard extends Component {
               <Grid item xs={12} sm={6}>
                 <Typography>{this.state.formattedRole}</Typography>
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography>
+                  {this.state.role ? (
+                    this.state.role
+                  ) : (
+                    <Typography style={{ fontWeight: 700 }}>
+                      Role not assigned
+                    </Typography>
+                  )}
+                </Typography>
+              </Grid>
             </Grid>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
