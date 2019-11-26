@@ -1,4 +1,4 @@
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import UserCard from '../components/UserCard';
 
 class AssignRoles extends Component {
@@ -7,6 +7,10 @@ class AssignRoles extends Component {
   };
 
   componentDidMount() {
+    this.getUserInfo();
+  }
+
+  getUserInfo() {
     fetch(`http://localhost:5000/userInfo`, {
       method: 'GET'
     })

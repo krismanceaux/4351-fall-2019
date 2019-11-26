@@ -19,6 +19,7 @@ class UserCard extends Component {
       firstName: props.list.firstName,
       lastName: props.list.lastName,
       role: props.list.role,
+      roleList: [],
       formattedRole: '',
       isOpen: false,
       isSuccess: false
@@ -51,11 +52,21 @@ class UserCard extends Component {
 
   componentDidMount() {
     this.fixRole();
+    this.getRoles();
+  }
+
+  getRoles() {
+    fetch(`http://localhost:5000/getRoles`, {
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(result => this.setState({ roleList: result.roleList }))
+      .catch(err => console.log(err));
   }
 
   handleSubmit = () => {
     const { id, role } = this.state;
-    fetch(`http://localhost:5000/modifyRole`, {
+    fetch(`http://localhost:5000/assignRole`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -68,7 +79,7 @@ class UserCard extends Component {
 
   render() {
     return (
-      <div style={{ width: '90%', margin: 'auto' }}>
+      <div style={{ width: '90%', margin: 'auto', marginBottom: '20px' }}>
         <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
@@ -83,6 +94,17 @@ class UserCard extends Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography>{this.state.formattedRole}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography>
+                  {this.state.role ? (
+                    this.state.role
+                  ) : (
+                    <Typography style={{ fontWeight: 700 }}>
+                      Role not assigned
+                    </Typography>
+                  )}
+                </Typography>
               </Grid>
             </Grid>
           </ExpansionPanelSummary>
@@ -100,30 +122,14 @@ class UserCard extends Component {
                     row
                     value={this.state.role}
                   >
-                    <FormControlLabel
-                      value="FINANCE_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Finance"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="ENGG_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Engineering"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="HR_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Human Resources"
-                      labelPlacement="top"
-                    />
-                    <FormControlLabel
-                      value="SALES_ADMIN"
-                      control={<Radio color="primary" />}
-                      label="Sales"
-                      labelPlacement="top"
-                    />
+                    {this.state.roleList.map(obj => (
+                      <FormControlLabel
+                        value={obj.roleName}
+                        control={<Radio color="primary" />}
+                        label={obj.roleName}
+                        labelPlacement="top"
+                      />
+                    ))}
                   </RadioGroup>
                 </FormControl>
               </Grid>

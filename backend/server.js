@@ -27,7 +27,6 @@ app.get('/', (req, res) => {
   res.json('Default route');
 });
 
-// roleLink gets list of links assigned to a specific role
 app.post('/roleLinks', (req, res) => {
   const { role } = req.body;
   const command = `SELECT * FROM roleLink WHERE role = '${role}'`;
@@ -53,7 +52,7 @@ app.get('/globalLinks', (req, res) => {
 
 app.post('/signUp', (req, res) => {
   const { firstName, lastName, role, username } = req.body;
-  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', '${role}', '${username}')`;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', NULL, '${username}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -63,8 +62,24 @@ app.post('/signUp', (req, res) => {
   });
 });
 
+app.get('/getRoles', (req, res) => {
+  const command = `SELECT * 
+  FROM admin_portal.roleName
+  WHERE id NOT IN (1, 6)`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ roleList: result });
+    }
+  });
+});
+
 app.get('/userInfo', (req, res) => {
-  const command = `SELECT id, firstName, lastName, role FROM person WHERE role != 'SUPER_ADMIN'`;
+  const command = `SELECT id, firstName, lastName, role, userName
+  FROM person
+  WHERE role != 'Super'
+  OR ISNULL(role)`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -74,9 +89,26 @@ app.get('/userInfo', (req, res) => {
   });
 });
 
-app.post('/modifyRole', (req, res) => {
+app.post('/assignRole', (req, res) => {
   const { id, role } = req.body;
-  const command = `UPDATE person SET person.role = '${role}' WHERE person.id = ${id}`;
+  const command = `UPDATE person
+  SET person.role = '${role}',
+  person.roleID = (SELECT id from roleName where roleName = '${role}')
+  WHERE person.id = ${id}`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ result });
+    }
+  });
+});
+
+app.post('/getRoleLinks', (req, res) => {
+  const { roleID, role } = req.body;
+  const command = `SELECT roleLink 
+  FROM roleLink 
+  WHERE role = '${role}'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });

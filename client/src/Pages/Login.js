@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
 
 class Login extends Component {
   state = {
@@ -130,7 +131,9 @@ class Login extends Component {
                 Login
               </Button>
               <Grid container justify="flex-end">
-                <Grid item></Grid>
+                <Grid item>
+                  <Link href="/signUp">Don't have an account? Sign up</Link>
+                </Grid>
               </Grid>
             </form>
             {this.output()}

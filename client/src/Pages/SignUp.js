@@ -55,6 +55,7 @@ const SignUp = () => {
       body: JSON.stringify(parsedFormData)
     }).then(res => res.json());
     console.log(parsedFormData);
+    window.location.replace('/');
   };
 
   return (
