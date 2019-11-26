@@ -106,9 +106,9 @@ app.post('/assignRole', (req, res) => {
 
 app.post('/getRoleLinks', (req, res) => {
   const { roleID, role } = req.body;
-  const command = `select roleLink 
-  from roleLink 
-  where role = 'testRole'`;
+  const command = `SELECT roleLink 
+  FROM roleLink 
+  WHERE role = '${role}'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });

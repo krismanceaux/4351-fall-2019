@@ -6,11 +6,13 @@ import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import { Grid, TextField } from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import Button from '@material-ui/core/Button';
 
 class ModifyRole extends Component {
   state = {
     roleList: [],
     pickedRole: '',
+    pickedRoleNewName: '',
     pickedRoleID: '',
     pickedRoleLinks: []
   };
@@ -25,8 +27,14 @@ class ModifyRole extends Component {
   }
 
   getLinksForRole() {
+    const roleID = this.state.pickedRoleID;
+    const role = this.state.pickedRole;
     fetch(`http://localhost:5000/getRoleLinks`, {
-      method: 'GET'
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ roleID, role })
     })
       .then(res => res.json())
       .then(result => this.setState({ pickedRoleLinks: result }));
@@ -43,9 +51,15 @@ class ModifyRole extends Component {
     });
   };
 
-  handlePickedRole = event => {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.pickedRole !== this.state.pickedRole) {
+      this.getLinksForRole();
+    }
+  }
+
+  handlePickedRoleNewName = event => {
     this.setState({
-      pickedRoleLinks: [...this.state.pickedRoleLinks, event.target.value]
+      pickedRoleNewName: event.target.value
     });
   };
 
@@ -84,7 +98,8 @@ class ModifyRole extends Component {
               fullWidth
               id="newRoleName"
               label="New Role Name"
-              onChange={this.handlePickedRole}
+              value={this.state.pickedRoleNewName}
+              onChange={this.handlePickedRoleNewName}
             />
           </Grid>
         </Grid>
@@ -126,6 +141,14 @@ class ModifyRole extends Component {
             </Grid>
           </Grid>
         </Grid>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          style={{ margin: '24px 0px 16px' }}
+        >
+          Submit Changes
+        </Button>
       </div>
     );
   }
