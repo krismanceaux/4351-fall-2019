@@ -94,7 +94,7 @@ app.post('/modifyRole', (req, res) => {
   const { id, role } = req.body;
   const command = `UPDATE person
   SET person.role = '${role}',
-  person.roleID = (SELECT id from roleName where roleName = 'Engineering')
+  person.roleID = (SELECT id from roleName where roleName = '${role}')
   WHERE person.id = ${id}`;
   connection.query(command, (err, result) => {
     if (err) {
