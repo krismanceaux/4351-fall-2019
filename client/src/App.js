@@ -20,11 +20,8 @@ class App extends Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
             <Route path="/assign" component={AssignRoles} />
-<<<<<<< HEAD
             <Route path="/adminroles" component={AdminRoles} />
-=======
             <Route path="/modifyRole" component={ModifyRole} />
->>>>>>> master
           </Switch>
         </div>
       </Router>
