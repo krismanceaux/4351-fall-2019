@@ -27,7 +27,6 @@ app.get('/', (req, res) => {
   res.json('Default route');
 });
 
-// roleLink gets list of links assigned to a specific role
 app.post('/roleLinks', (req, res) => {
   const { role } = req.body;
   const command = `SELECT * FROM roleLink WHERE role = '${role}'`;
@@ -90,12 +89,26 @@ app.get('/userInfo', (req, res) => {
   });
 });
 
-app.post('/modifyRole', (req, res) => {
+app.post('/assignRole', (req, res) => {
   const { id, role } = req.body;
   const command = `UPDATE person
   SET person.role = '${role}',
   person.roleID = (SELECT id from roleName where roleName = '${role}')
   WHERE person.id = ${id}`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ result });
+    }
+  });
+});
+
+app.post('/getRoleLinks', (req, res) => {
+  const { roleID, role } = req.body;
+  const command = `select roleLink 
+  from roleLink 
+  where role = 'testRole'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });

@@ -35,7 +35,9 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" style={{ flexGrow: '1' }}>
-              Admin Portal
+              <Link href="/home" style={{ color: '#FFFFFF' }}>
+                Admin Portal
+              </Link>
             </Typography>
             {isLoggedIn ? (
               <Button

@@ -66,7 +66,7 @@ class UserCard extends Component {
 
   handleSubmit = () => {
     const { id, role } = this.state;
-    fetch(`http://localhost:5000/modifyRole`, {
+    fetch(`http://localhost:5000/assignRole`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
