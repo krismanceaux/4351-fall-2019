@@ -19,6 +19,18 @@ class AdminCard extends Component {
     };
   }
 
+  Delete = () => {
+    fetch(`http://localhost:5000/deleteRole`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ role: this.state.admin })
+    })
+      .then(res => res.json())
+      .catch(err => console.log(err));
+  };
+
   render() {
     return (
       <div style={{ width: '90%', margin: 'auto' }}>
@@ -34,7 +46,36 @@ class AdminCard extends Component {
             </Grid>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Typography>blah</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={2}>
+                {/* button goes here */}
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  style={{
+                    height: 35
+                  }}
+                  href="/modifyRole"
+                >
+                  Modify
+                </Button>
+              </Grid>
+              <Grid item xs={2}>
+                {/* button goes here */}
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  style={{
+                    height: 35
+                  }}
+                  onClick={this.Delete}
+                >
+                  Delete
+                </Button>
+              </Grid>
+            </Grid>
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>

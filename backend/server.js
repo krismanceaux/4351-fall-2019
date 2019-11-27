@@ -155,4 +155,16 @@ app.get('/getAdminName', (req, res) => {
   });
 });
 
+app.delete('/deleteRole', (req, res) => {
+  const { role } = req.body;
+  const command = `DELETE FROM roleName WHERE roleName = '${role}'`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ message: 'Successfully deleted record' });
+    }
+  });
+});
+
 app.listen(5000, () => 'Server started on port 5000');

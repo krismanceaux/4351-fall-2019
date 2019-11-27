@@ -73,7 +73,7 @@ class AdminRoles extends Component {
           </Grid>
         </div>
         {this.state.adminList.map(admin => (
-          <AdminCard admin={{ ...admin }} />
+          <AdminCard admin={{ ...admin }} style={{ marginBottom: '10px' }} />
         ))}
       </React.Fragment>
     );
