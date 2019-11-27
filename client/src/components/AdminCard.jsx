@@ -15,7 +15,7 @@ class AdminCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      admin: props.admin.adminType
+      admin: props.admin.roleName
     };
   }
 

@@ -4,7 +4,7 @@ import { Grid, TextField, Button } from '@material-ui/core';
 
 class AdminRoles extends Component {
   state = {
-    adminType: '',
+    roleName: '',
     adminList: []
   };
 
@@ -17,25 +17,27 @@ class AdminRoles extends Component {
       .catch(err => console.log(err));
   }
 
-  handleAdminType = text => {
-    this.setState({ adminType: text.target.value });
+  handleroleName = text => {
+    this.setState({ roleName: text.target.value });
   };
 
   Submit = () => {
-    const adtype = this.state.adminType;
+    const adtype = this.state.roleName;
     console.log('type: ' + adtype);
-    //console.log(this.state.adminType);
+    //console.log(this.state.roleName);
     fetch(`http://localhost:5000/addToAdminList`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        adminType: this.state.adminType
+        roleName: this.state.roleName
       })
     })
       .then(res => res.json())
       .catch(err => console.log(err));
+
+    window.location.replace('/adminroles');
   };
 
   render() {
@@ -44,13 +46,13 @@ class AdminRoles extends Component {
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <TextField
-              name="adminType"
+              name="roleName"
               variant="outlined"
               fullWidth
-              id="adminType"
+              id="roleName"
               label="Admin Type"
-              value={this.state.adminType}
-              onChange={this.handleAdminType}
+              value={this.state.roleName}
+              onChange={this.handleroleName}
             />
           </Grid>
 

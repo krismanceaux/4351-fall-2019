@@ -133,8 +133,8 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/addToAdminList', (req, res) => {
-  const { adminType } = req.body;
-  const command = `INSERT INTO admin_portal.admin (adminType) values ('${adminType}')`;
+  const { roleName } = req.body;
+  const command = `INSERT INTO admin_portal.roleName (roleName) values ('${roleName}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -145,7 +145,7 @@ app.post('/addToAdminList', (req, res) => {
 });
 
 app.get('/getAdminName', (req, res) => {
-  const command = `SELECT * FROM admin`;
+  const command = `SELECT * FROM roleName`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
