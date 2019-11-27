@@ -145,7 +145,7 @@ app.post('/addToAdminList', (req, res) => {
 });
 
 app.get('/getAdminName', (req, res) => {
-  const command = `SELECT * FROM roleName`;
+  const command = `SELECT * FROM roleName WHERE roleName <> 'Super'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });

@@ -29,6 +29,7 @@ class AdminCard extends Component {
     })
       .then(res => res.json())
       .catch(err => console.log(err));
+    window.location.replace('/adminroles');
   };
 
   render() {
