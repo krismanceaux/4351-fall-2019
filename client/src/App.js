@@ -6,6 +6,7 @@ import ModifyRole from './Pages/ModifyRole';
 import Login from './Pages/Login';
 import Header from './components/Header';
 import Home from './Pages/Home';
+import AdminRoles from './Pages/AdminRoles';
 
 class App extends Component {
   render() {
@@ -19,6 +20,7 @@ class App extends Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/home" component={Home} />
             <Route path="/assign" component={AssignRoles} />
+            <Route path="/adminroles" component={AdminRoles} />
             <Route path="/modifyRole" component={ModifyRole} />
           </Switch>
         </div>
