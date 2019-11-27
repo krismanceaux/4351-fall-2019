@@ -43,31 +43,35 @@ class AdminRoles extends Component {
   render() {
     return (
       <React.Fragment>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <TextField
-              name="roleName"
-              variant="outlined"
-              fullWidth
-              id="roleName"
-              label="Admin Type"
-              value={this.state.roleName}
-              onChange={this.handleroleName}
-            />
-          </Grid>
+        <div style={{ width: '80%', margin: 'auto auto 10px auto' }}>
+          <Grid container spacing={2}>
+            <Grid item xs={8} style={{ verticalAlign: 'middle' }}>
+              <TextField
+                name="roleName"
+                variant="outlined"
+                fullWidth
+                id="roleName"
+                label="Add an Admin Role Here"
+                value={this.state.roleName}
+                onChange={this.handleroleName}
+              />
+            </Grid>
 
-          <Grid item xs={4}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              style={{ margin: '24px 0px 16px' }}
-              onClick={this.Submit}
-            >
-              Submit
-            </Button>
+            <Grid item xs={4}>
+              <Button
+                //fullWidth
+                variant="contained"
+                color="primary"
+                style={{
+                  height: 55
+                }}
+                onClick={this.Submit}
+              >
+                Submit
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
+        </div>
         {this.state.adminList.map(admin => (
           <AdminCard admin={{ ...admin }} />
         ))}
