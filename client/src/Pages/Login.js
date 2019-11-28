@@ -45,7 +45,7 @@ class Login extends Component {
         ) {
           this.setState({ output: 1 });
           localStorage.setItem('id', result.id);
-          localStorage.setItem('role', result.role);
+          localStorage.setItem('role', result.roleName);
           localStorage.setItem('isLoggedIn', true);
           this.setState({ id: result.id, role: result.role });
         } else {

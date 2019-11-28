@@ -28,13 +28,12 @@ class ModifyRole extends Component {
 
   getLinksForRole() {
     const roleID = this.state.pickedRoleID;
-    const role = this.state.pickedRole;
     fetch(`http://localhost:5000/getRoleLinks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ roleID, role })
+      body: JSON.stringify({ roleID })
     })
       .then(res => res.json())
       .then(result =>
@@ -58,6 +57,19 @@ class ModifyRole extends Component {
       this.getLinksForRole();
     }
   }
+
+  handleSubmit = () => {
+    const { pickedRole, pickedRoleNewName, pickedRoleID } = this.state;
+    fetch(`http://localhost:5000/modifyRoleName`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ pickedRole, pickedRoleNewName, pickedRoleID })
+    })
+      .then(res => res.json())
+      .then(this.setState({ isOpen: true }));
+  };
 
   handlePickedRoleNewName = event => {
     this.setState({
@@ -112,6 +124,7 @@ class ModifyRole extends Component {
         </Grid>
 
         <Button
+          onClick={this.handleSubmit}
           fullWidth
           variant="contained"
           color="primary"
