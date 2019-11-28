@@ -51,8 +51,8 @@ app.get('/globalLinks', (req, res) => {
 });
 
 app.post('/signUp', (req, res) => {
-  const { firstName, lastName, role, username } = req.body;
-  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', NULL, '${username}')`;
+  const { firstName, lastName, username } = req.body;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, username) VALUES ('${firstName}', '${lastName}', '${username}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -76,10 +76,11 @@ app.get('/getRoles', (req, res) => {
 });
 
 app.get('/userInfo', (req, res) => {
-  const command = `SELECT id, firstName, lastName, role, userName
-  FROM person
-  WHERE role != 'Super'
-  OR ISNULL(role)`;
+  const command = `SELECT person.id, firstName, lastName,  userName,
+  roleName.roleName
+    FROM person, roleName
+    WHERE person.roleID = roleName.id
+    AND roleName != 'Super'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -105,10 +106,10 @@ app.post('/assignRole', (req, res) => {
 });
 
 app.post('/getRoleLinks', (req, res) => {
-  const { roleID, role } = req.body;
+  const { roleID } = req.body;
   const command = `SELECT roleLink, roleID, role
   FROM roleLink 
-  WHERE role = '${role}'`;
+  WHERE roleID = '${roleID}'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -120,7 +121,21 @@ app.post('/getRoleLinks', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { userName, password } = req.body;
-  const command = `SELECT * FROM person WHERE userName='${userName}' AND password='${password}'`;
+  const command = `SELECT 
+  person.id,
+  person.firstName,
+  person.lastName,
+  person.roleID,
+  person.userName,
+  person.password,
+  roleName.roleName
+FROM
+  person,
+  roleName
+WHERE
+  person.roleID = roleName.id
+      AND userName = '${userName}'
+      AND password = '${password}'`;
   connection.query(command, (err, result) => {
     if (result.length === 0) {
       return res.json({
@@ -146,6 +161,32 @@ app.post('/addToAdminList', (req, res) => {
 
 app.get('/getAdminName', (req, res) => {
   const command = `SELECT * FROM roleName WHERE roleName <> 'Super'`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ adminList: result });
+    }
+  });
+});
+
+app.post('/modifyLink', (req, res) => {
+  const { roleLink, newRoleLink, roleID, role } = req.body;
+  const command = `UPDATE roleLink SET roleLink = '${newRoleLink}' 
+  WHERE roleID = '${roleID}' AND role = '${role}' AND roleLink = '${roleLink}' `;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ adminList: result });
+    }
+  });
+});
+
+app.post('/modifyRoleName', (req, res) => {
+  const { pickedRole, pickedRoleNewName, pickedRoleID } = req.body;
+  const command = `UPDATE roleName SET roleName = '${pickedRoleNewName}' 
+  WHERE id = ${pickedRoleID} AND roleName = '${pickedRole}'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
