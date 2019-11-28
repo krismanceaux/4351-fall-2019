@@ -5,8 +5,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import { Grid, TextField } from '@material-ui/core';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Button from '@material-ui/core/Button';
+import EditLink from '../components/EditLink';
 
 class ModifyRole extends Component {
   state = {
@@ -37,7 +37,9 @@ class ModifyRole extends Component {
       body: JSON.stringify({ roleID, role })
     })
       .then(res => res.json())
-      .then(result => this.setState({ pickedRoleLinks: result }));
+      .then(result =>
+        this.setState({ pickedRoleLinks: result.pickedRoleLinks })
+      );
   }
 
   componentDidMount() {
@@ -67,88 +69,59 @@ class ModifyRole extends Component {
     return (
       <div style={{ width: '80%', margin: 'auto' }}>
         <Typography variant="h4" style={{ marginBottom: '20px' }}>
-          Admin Dash - Modify Roles
+          Admin Dashboard - Modify Roles
         </Typography>
         <Grid container justify="center" spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <FormControl variant="outlined" style={{ minWidth: '100%' }}>
-              <InputLabel id="demo-simple-select-outlined-label">
-                Select Role
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={this.state.pickedRole.roleName}
-                onChange={this.handlePickedRole}
-              >
-                {this.state.roleList.map(role => (
-                  <MenuItem value={role}>{role.roleName}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Grid item xs={12} sm={6}>
+            <Grid container justify="center" spacing={2} direction="column">
+              <Grid item xs={12} sm={12}>
+                <FormControl variant="outlined" style={{ minWidth: '100%' }}>
+                  <InputLabel id="demo-simple-select-outlined-label">
+                    Select Role
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={this.state.pickedRole.roleName}
+                    onChange={this.handlePickedRole}
+                  >
+                    {this.state.roleList.map(role => (
+                      <MenuItem value={role}>{role.roleName}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={2}>
-            Change Role Name To:
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              name="newRoleName"
-              variant="outlined"
-              required
-              fullWidth
-              id="newRoleName"
-              label="New Role Name"
-              value={this.state.pickedRoleNewName}
-              onChange={this.handlePickedRoleNewName}
-            />
-          </Grid>
-        </Grid>
-        <Grid container justify="center" spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              name="lastName"
-              variant="outlined"
-              required
-              fullWidth
-              id="lastName"
-              label="Last Name"
-            />
-          </Grid>
-          <Grid item xs={12} sm={2}>
-            <ArrowForwardIosIcon />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              style={{ marginBottom: '20px' }}
-              variant="outlined"
-              required
-              fullWidth
-              name="username"
-              label="Username"
-              type="username"
-              id="username"
-            />
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-              />
+          <Grid item xs={12} sm={6}>
+            <Grid container justify="center" spacing={2} direction="column">
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  name="newRoleName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="newRoleName"
+                  label="New Role Name"
+                  value={this.state.pickedRoleNewName}
+                  onChange={this.handlePickedRoleNewName}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
+
         <Button
           fullWidth
           variant="contained"
           color="primary"
           style={{ margin: '24px 0px 16px' }}
         >
-          Submit Changes
+          Submit Name Change
         </Button>
+        {this.state.pickedRoleLinks.map(obj => (
+          <EditLink linkArray={{ ...obj }} />
+        ))}
       </div>
     );
   }

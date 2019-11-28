@@ -106,14 +106,14 @@ app.post('/assignRole', (req, res) => {
 
 app.post('/getRoleLinks', (req, res) => {
   const { roleID, role } = req.body;
-  const command = `SELECT roleLink 
+  const command = `SELECT roleLink, roleID, role
   FROM roleLink 
   WHERE role = '${role}'`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
     } else {
-      return res.json({ result });
+      return res.json({ pickedRoleLinks: result });
     }
   });
 });
