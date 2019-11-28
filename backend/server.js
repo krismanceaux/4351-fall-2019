@@ -132,4 +132,39 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/addToAdminList', (req, res) => {
+  const { roleName } = req.body;
+  const command = `INSERT INTO admin_portal.roleName (roleName) values ('${roleName}')`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ result });
+    }
+  });
+});
+
+app.get('/getAdminName', (req, res) => {
+  const command = `SELECT * FROM roleName WHERE roleName <> 'Super'`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ adminList: result });
+    }
+  });
+});
+
+app.delete('/deleteRole', (req, res) => {
+  const { role } = req.body;
+  const command = `DELETE FROM roleName WHERE roleName = '${role}'`;
+  connection.query(command, (err, result) => {
+    if (err) {
+      return res.json({ err });
+    } else {
+      return res.json({ message: 'Successfully deleted record' });
+    }
+  });
+});
+
 app.listen(5000, () => 'Server started on port 5000');
