@@ -28,8 +28,8 @@ app.get('/', (req, res) => {
 });
 
 app.post('/roleLinks', (req, res) => {
-  const { role } = req.body;
-  const command = `SELECT * FROM roleLink WHERE role = '${role}'`;
+  const { roleID } = req.body;
+  const command = `SELECT * FROM roleLink WHERE roleID = ${roleID}`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
@@ -40,7 +40,7 @@ app.post('/roleLinks', (req, res) => {
 });
 
 app.get('/globalLinks', (req, res) => {
-  const command = `SELECT * FROM roleLink WHERE role = 'GLOBAL' ORDER BY role ASC`;
+  const command = `SELECT * FROM roleLink WHERE roleID = 6`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
