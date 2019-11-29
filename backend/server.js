@@ -76,7 +76,7 @@ app.get('/getRoles', (req, res) => {
 });
 
 app.get('/userInfo', (req, res) => {
-  const command = `SELECT person.id, firstName, lastName,  userName,
+  const command = `SELECT person.id, firstName, lastName,  userName, roleID,
   roleName.roleName
     FROM person, roleName
     WHERE person.roleID = roleName.id
@@ -91,10 +91,9 @@ app.get('/userInfo', (req, res) => {
 });
 
 app.post('/assignRole', (req, res) => {
-  const { id, role } = req.body;
+  const { id, roleName } = req.body;
   const command = `UPDATE person
-  SET person.role = '${role}',
-  person.roleID = (SELECT id from roleName where roleName = '${role}')
+  SET person.roleID = (SELECT id from roleName where roleName = '${roleName}')
   WHERE person.id = ${id}`;
   connection.query(command, (err, result) => {
     if (err) {
