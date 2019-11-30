@@ -190,6 +190,9 @@ app.post(
   passport.authenticate('local', {
     failureRedirect: '/'
   }),
+  // getting to this anon function below means the authentication worked.
+  // ideally, we wouldn't need to do this, but in an effort to NOT change the
+  // client side too much, we just perform the query again to load the home page
   (req, res) => {
     const { username, password } = req.body;
     const command = `SELECT 
