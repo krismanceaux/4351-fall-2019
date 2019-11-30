@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const env = process.env.NODE_ENV || 'databaseConfig';
 const config = require('./config')[env];
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const { Strategy } = require('passport-local');
 
 const app = express();
 
@@ -22,6 +26,52 @@ connection.connect(err => {
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(session({ secret: 'harambe' }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// store user in the session
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+//retrieve user from the session
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+function localStrategy() {
+  passport.use(
+    new Strategy(
+      {
+        username: username,
+        password: password
+      },
+      (username, password, done) => {
+        const command = `SELECT username, password FROM person WHERE userName = '${username}'`;
+        connection.query(command, (err, result) => {
+          if (err) {
+            // return res.json({ err });
+          } else {
+            if (result.password == password) {
+              let user = {};
+              user['username'] = result.userName;
+              user['password'] = result.password;
+
+              done(null, user);
+            } else {
+              done(null, false);
+            }
+            //return res.json({ roleLinks: result });
+          }
+        });
+        done(null, user);
+      }
+    )
+  );
+}
 
 app.get('/', (req, res) => {
   res.json('Default route');
@@ -51,16 +101,29 @@ app.get('/globalLinks', (req, res) => {
 });
 
 app.post('/signUp', (req, res) => {
-  const { firstName, lastName, role, username } = req.body;
-  const command = `INSERT INTO admin_portal.person (firstName, lastName, role, username) VALUES ('${firstName}', '${lastName}', NULL, '${username}')`;
+  console.log('in signup');
+  console.log(req.body);
+  const { firstName, lastName, username, password } = req.body;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, userName, password) VALUES ('${firstName}', '${lastName}', '${username}', '${password}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
     } else {
-      return res.json({ result });
+      console.log('before result');
+      console.log(result);
+
+      req.login({ username, password, id: result.insertId }, () => {
+        res.redirect('/auth/home');
+      });
+      console.log('sending response');
+      return res.json(req.user);
     }
   });
 });
+
+// app.get('/profile', (req, res) => {
+
+// });
 
 app.get('/getRoles', (req, res) => {
   const command = `SELECT * 
@@ -131,6 +194,14 @@ app.post('/login', (req, res) => {
     }
   });
 });
+
+app.post(
+  '/signin',
+  passport.authenticate('local', {
+    successRedirect: '/auth/home',
+    failureRedirect: '/'
+  })
+);
 
 app.post('/addToAdminList', (req, res) => {
   const { roleName } = req.body;

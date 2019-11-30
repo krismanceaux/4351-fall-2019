@@ -47,13 +47,13 @@ const SignUp = () => {
 
   const handleSubmit = () => {
     const parsedFormData = { ...formData };
-    fetch(`http://localhost:5000/signup`, {
+    fetch(`http://localhost:5000/signUp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(parsedFormData)
-    }).then(res => res.json());
+    }).then(res => console.log(res.json()));
     console.log(parsedFormData);
     window.location.replace('/');
   };
