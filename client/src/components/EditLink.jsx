@@ -30,6 +30,23 @@ class EditLink extends Component {
     }
   }
 
+  handleSubmit = () => {
+    const { roleID, role, roleLink, newRoleLink } = this.state;
+    fetch(`http://localhost:5000/modifyLink`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ roleID, role, roleLink, newRoleLink })
+    })
+      .then(res => res.json())
+      .then(this.setState({ isOpen: true }));
+  };
+
+  handleChange = event => {
+    this.setState({ newRoleLink: event.target.value });
+  };
+
   render() {
     return (
       <Grid container justify="center" spacing={2}>
@@ -47,10 +64,19 @@ class EditLink extends Component {
           {this.state.roleLink}
         </Grid>
         <Grid item xs={12} sm={4}>
-          <TextField variant="outlined" required fullWidth></TextField>
+          <TextField
+            onChange={this.handleChange}
+            variant="outlined"
+            required
+            fullWidth
+          ></TextField>
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Button variant="contained" color="primary">
+          <Button
+            onClick={this.handleSubmit}
+            variant="contained"
+            color="primary"
+          >
             Change Link
           </Button>
         </Grid>

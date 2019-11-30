@@ -18,7 +18,7 @@ class UserCard extends Component {
       id: props.list.id,
       firstName: props.list.firstName,
       lastName: props.list.lastName,
-      role: props.list.role,
+      roleName: props.list.roleName,
       roleList: [],
       formattedRole: '',
       isOpen: false,
@@ -97,8 +97,8 @@ class UserCard extends Component {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Typography>
-                  {this.state.role ? (
-                    this.state.role
+                  {this.state.roleName ? (
+                    this.state.roleName
                   ) : (
                     <Typography style={{ fontWeight: 700 }}>
                       Role not assigned

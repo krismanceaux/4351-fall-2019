@@ -11,6 +11,7 @@ class Home extends Component {
       roleLinks: [],
       globalLinks: [],
       role: localStorage.getItem('role'),
+      roleID: localStorage.getItem('roleID'),
       formattedRole: ''
     };
   }
@@ -27,7 +28,7 @@ class Home extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ role: this.state.role })
+      body: JSON.stringify({ roleID: this.state.roleID })
     })
       .then(res => res.json())
       .then(result => this.setState({ roleLinks: result.roleLinks }))
