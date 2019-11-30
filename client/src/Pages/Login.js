@@ -26,18 +26,19 @@ class Login extends Component {
   };
 
   Login() {
-    fetch(`http://localhost:5000/signin`, {
+    fetch(`http://localhost:5000/auth/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        userName: this.state.userName,
+        username: this.state.userName,
         password: this.state.password
       })
     })
       .then(res => res.json())
       .then(result => {
+        console.log(result);
         if (
           result.id !== null &&
           result.id !== undefined &&
@@ -57,6 +58,8 @@ class Login extends Component {
   }
 
   output() {
+    console.log(this.state.userName);
+    console.log(this.state.password);
     if (this.state.output === 0) {
       return (
         <center>

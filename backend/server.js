@@ -7,7 +7,7 @@ const config = require('./config')[env];
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const { Strategy } = require('passport-local');
+const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
 
@@ -28,7 +28,15 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(session({ secret: 'harambe' }));
+
+// the secret would normally be put into a config file
+app.use(
+  session({
+    secret: 'harambe',
+    resave: true,
+    saveUninitialized: true
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,36 +50,45 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-function localStrategy() {
-  passport.use(
-    new Strategy(
-      {
-        username: username,
-        password: password
-      },
-      (username, password, done) => {
-        const command = `SELECT username, password FROM person WHERE userName = '${username}'`;
-        connection.query(command, (err, result) => {
-          if (err) {
-            // return res.json({ err });
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: 'username',
+      passwordField: 'password'
+    },
+    (username, password, done) => {
+      const command = `SELECT 
+      person.id,
+      person.firstName,
+      person.lastName,
+      person.roleID,
+      person.userName,
+      person.password,
+      roleName.roleName
+    FROM
+      person,
+      roleName
+    WHERE
+      person.roleID = roleName.id
+          AND userName = '${username}'
+          AND password = '${password}'`;
+      connection.query(command, (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          if (result.length > 0 && result[0].password == password) {
+            let user = {};
+            user['username'] = result[0].userName;
+            user['password'] = result[0].password;
+            done(null, user);
           } else {
-            if (result.password == password) {
-              let user = {};
-              user['username'] = result.userName;
-              user['password'] = result.password;
-
-              done(null, user);
-            } else {
-              done(null, false);
-            }
-            //return res.json({ roleLinks: result });
+            done(null, false);
           }
-        });
-        done(null, user);
-      }
-    )
-  );
-}
+        }
+      });
+    }
+  )
+);
 
 app.get('/', (req, res) => {
   res.json('Default route');
@@ -101,27 +118,16 @@ app.get('/globalLinks', (req, res) => {
 });
 
 app.post('/signUp', (req, res) => {
-  const { firstName, lastName, username } = req.body;
-  const command = `INSERT INTO admin_portal.person (firstName, lastName, username) VALUES ('${firstName}', '${lastName}', '${username}')`;
+  const { firstName, lastName, username, password } = req.body;
+  const command = `INSERT INTO admin_portal.person (firstName, lastName, username, password) VALUES ('${firstName}', '${lastName}', '${username}', '${password}')`;
   connection.query(command, (err, result) => {
     if (err) {
       return res.json({ err });
     } else {
-      console.log('before result');
-      console.log(result);
-
-      req.login({ username, password, id: result.insertId }, () => {
-        res.redirect('/auth/home');
-      });
-      console.log('sending response');
-      return res.json(req.user);
+      return res.json({ result });
     }
   });
 });
-
-// app.get('/profile', (req, res) => {
-
-// });
 
 app.get('/getRoles', (req, res) => {
   const command = `SELECT * 
@@ -179,9 +185,14 @@ app.post('/getRoleLinks', (req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
-  const { userName, password } = req.body;
-  const command = `SELECT 
+app.post(
+  '/auth/signin',
+  passport.authenticate('local', {
+    failureRedirect: '/'
+  }),
+  (req, res) => {
+    const { username, password } = req.body;
+    const command = `SELECT 
   person.id,
   person.firstName,
   person.lastName,
@@ -194,25 +205,18 @@ FROM
   roleName
 WHERE
   person.roleID = roleName.id
-      AND userName = '${userName}'
+      AND userName = '${username}'
       AND password = '${password}'`;
-  connection.query(command, (err, result) => {
-    if (result.length === 0) {
-      return res.json({
-        status: 0
-      });
-    } else {
-      return res.json(result[0]);
-    }
-  });
-});
-
-app.post(
-  '/signin',
-  passport.authenticate('local', {
-    successRedirect: '/auth/home',
-    failureRedirect: '/'
-  })
+    connection.query(command, (err, result) => {
+      if (result.length === 0) {
+        return res.json({
+          status: 0
+        });
+      } else {
+        return res.json(result[0]);
+      }
+    });
+  }
 );
 
 app.post('/addToAdminList', (req, res) => {
