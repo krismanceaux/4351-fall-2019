@@ -8,6 +8,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -80,6 +81,11 @@ passport.use(
             let user = {};
             user['username'] = result[0].userName;
             user['password'] = result[0].password;
+            user['id'] = result[0].id;
+            user['firstName'] = result[0].firstName;
+            user['lastName'] = result[0].lastName;
+            user['roleID'] = result[0].roleID;
+            user['roleName'] = result[0].roleName;
             done(null, user);
           } else {
             done(null, false);
@@ -190,35 +196,23 @@ app.post(
   passport.authenticate('local', {
     failureRedirect: '/'
   }),
-  // getting to this anon function below means the authentication worked.
-  // ideally, we wouldn't need to do this, but in an effort to NOT change the
-  // client side too much, we just perform the query again to load the home page
   (req, res) => {
-    const { username, password } = req.body;
-    const command = `SELECT 
-  person.id,
-  person.firstName,
-  person.lastName,
-  person.roleID,
-  person.userName,
-  person.password,
-  roleName.roleName
-FROM
-  person,
-  roleName
-WHERE
-  person.roleID = roleName.id
-      AND userName = '${username}'
-      AND password = '${password}'`;
-    connection.query(command, (err, result) => {
-      if (result.length === 0) {
+    jwt.sign(
+      {
+        user: {
+          username: req.user.username,
+          password: req.user.password,
+          id: req.user.id
+        }
+      },
+      'somesecretkey',
+      (err, token) => {
         return res.json({
-          status: 0
+          result: req.user,
+          token
         });
-      } else {
-        return res.json(result[0]);
       }
-    });
+    );
   }
 );
 

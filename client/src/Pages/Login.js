@@ -40,16 +40,17 @@ class Login extends Component {
       .then(result => {
         console.log(result);
         if (
-          result.id !== null &&
-          result.id !== undefined &&
-          result.id.length !== 0
+          result.result.id !== null &&
+          result.result.id !== undefined &&
+          result.result.id.length !== 0
         ) {
           this.setState({ output: 1 });
-          localStorage.setItem('id', result.id);
-          localStorage.setItem('role', result.roleName);
-          localStorage.setItem('roleID', result.roleID);
+          localStorage.setItem('id', result.result.id);
+          localStorage.setItem('role', result.result.roleName);
+          localStorage.setItem('roleID', result.result.roleID);
           localStorage.setItem('isLoggedIn', true);
-          this.setState({ id: result.id, role: result.role });
+          this.setState({ id: result.result.id, role: result.result.role });
+          localStorage.setItem('jwt', result.token);
         } else {
           this.setState({ output: 0 });
         }
