@@ -25,15 +25,16 @@ class AuthenticatedComponent extends Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log('In auth component');
-        console.log(res);
-        this.setState({
-          user: res.id
-        });
+        if (res.roleID == 1) {
+          this.setState({
+            user: res.id
+          });
+        } else {
+          this.props.history.push('/home');
+        }
       })
       .then(this.render())
       .catch(err => {
-        console.log('before error');
         console.log(err);
         localStorage.removeItem('jwt');
         this.props.history.push('/');

@@ -19,7 +19,6 @@ class Home extends Component {
   componentDidMount() {
     this.getGlobalLinks();
     this.getRoleLinks();
-    this.fixRole();
   }
 
   getRoleLinks() {
@@ -42,26 +41,6 @@ class Home extends Component {
       .then(res => res.json())
       .then(result => this.setState({ globalLinks: result.globalLinks }))
       .catch(err => console.log(err));
-  }
-
-  fixRole() {
-    switch (this.state.role) {
-      case 'FINANCE_ADMIN':
-        this.setState({ formattedRole: 'Finance' });
-        break;
-      case 'HR_ADMIN':
-        this.setState({ formattedRole: 'HR' });
-        break;
-      case 'SALES_ADMIN':
-        this.setState({ formattedRole: 'Sales' });
-        break;
-      case 'ENGG_ADMIN':
-        this.setState({ formattedRole: 'Engineering' });
-        break;
-
-      default:
-        break;
-    }
   }
 
   render() {

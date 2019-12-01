@@ -29,6 +29,11 @@ connection.connect(err => {
 });
 
 app.use(cors());
+
+//
+// **** PASSPORT SETUP ****
+//
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -150,6 +155,10 @@ app.get(
     return res.json(req.user);
   }
 );
+
+//
+// **** PASSPORT END ****
+//
 
 app.get('/', (req, res) => {
   res.json('Default route');
