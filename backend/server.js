@@ -9,6 +9,9 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
+const passportJWT = require('passport-jwt');
+const JwtStrategy = passportJWT.Strategy;
+const ExtractJwt = passportJWT.ExtractJwt;
 
 const app = express();
 
@@ -50,6 +53,25 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
+
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: 'somesecretkey'
+};
+passport.use(
+  new JwtStrategy(opts, (payload, next) => {
+    const command = `SELECT * FROM person WHERE person.id = '${payload.user.id}'`;
+    connection.query(command, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result.length > 0) {
+          next(null, result[0]);
+        }
+      }
+    });
+  })
+);
 
 passport.use(
   new LocalStrategy(
@@ -94,6 +116,39 @@ passport.use(
       });
     }
   )
+);
+
+app.post(
+  '/auth/signin',
+  passport.authenticate('local', {
+    failureRedirect: '/'
+  }),
+  (req, res) => {
+    jwt.sign(
+      {
+        user: {
+          username: req.user.username,
+          password: req.user.password,
+          id: req.user.id
+        }
+      },
+      'somesecretkey',
+      (err, token) => {
+        return res.json({
+          result: req.user,
+          token
+        });
+      }
+    );
+  }
+);
+
+app.get(
+  '/getUser',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    return res.json(req.user);
+  }
 );
 
 app.get('/', (req, res) => {
@@ -190,31 +245,6 @@ app.post('/getRoleLinks', (req, res) => {
     }
   });
 });
-
-app.post(
-  '/auth/signin',
-  passport.authenticate('local', {
-    failureRedirect: '/'
-  }),
-  (req, res) => {
-    jwt.sign(
-      {
-        user: {
-          username: req.user.username,
-          password: req.user.password,
-          id: req.user.id
-        }
-      },
-      'somesecretkey',
-      (err, token) => {
-        return res.json({
-          result: req.user,
-          token
-        });
-      }
-    );
-  }
-);
 
 app.post('/addToAdminList', (req, res) => {
   const { roleName } = req.body;

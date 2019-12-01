@@ -7,6 +7,7 @@ class AssignRoles extends Component {
   };
 
   componentDidMount() {
+    console.log('assign roles component did mount');
     this.getUserInfo();
   }
 
@@ -20,6 +21,7 @@ class AssignRoles extends Component {
   }
 
   render() {
+    console.log('render');
     return this.state.personList.map(person => (
       <UserCard list={{ ...person }} />
     ));

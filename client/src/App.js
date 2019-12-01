@@ -7,6 +7,7 @@ import Login from './Pages/Login';
 import Header from './components/Header';
 import Home from './Pages/Home';
 import AdminRoles from './Pages/AdminRoles';
+import AuthenticatedComponent from './components/AuthenticatedComponent';
 
 class App extends Component {
   render() {
@@ -18,10 +19,12 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={Login} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/home" component={Home} />
-            <Route path="/assign" component={AssignRoles} />
-            <Route path="/adminroles" component={AdminRoles} />
-            <Route path="/modifyRole" component={ModifyRole} />
+            <AuthenticatedComponent>
+              <Route path="/home" component={Home} />
+              <Route path="/assign" component={AssignRoles} />
+              <Route path="/adminroles" component={AdminRoles} />
+              <Route path="/modifyRole" component={ModifyRole} />
+            </AuthenticatedComponent>
           </Switch>
         </div>
       </Router>
