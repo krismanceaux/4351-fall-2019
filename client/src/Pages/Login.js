@@ -38,8 +38,8 @@ class Login extends Component {
     })
       .then(res => res.json())
       .then(result => {
-        console.log(result);
         if (
+          result.result != undefined &&
           result.result.id !== null &&
           result.result.id !== undefined &&
           result.result.id.length !== 0
@@ -59,8 +59,6 @@ class Login extends Component {
   }
 
   output() {
-    console.log(this.state.userName);
-    console.log(this.state.password);
     if (this.state.output === 0) {
       return (
         <center>
