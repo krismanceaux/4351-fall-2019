@@ -19,39 +19,20 @@ class UserCard extends Component {
       firstName: props.list.firstName,
       lastName: props.list.lastName,
       roleName: props.list.roleName,
-      roleList: [],
-      formattedRole: '',
+      roleID: props.list.roleID,
       isOpen: false,
-      isSuccess: false
+      isSuccess: false,
+      roleList: []
     };
   }
 
-  fixRole() {
-    switch (this.state.role) {
-      case 'FINANCE_ADMIN':
-        this.setState({ formattedRole: 'Finance Admin' });
-        break;
-      case 'HR_ADMIN':
-        this.setState({ formattedRole: 'HR Admin' });
-        break;
-      case 'SALES_ADMIN':
-        this.setState({ formattedRole: 'Sales Admin' });
-        break;
-      case 'ENGG_ADMIN':
-        this.setState({ formattedRole: 'Engineering Admin' });
-        break;
-
-      default:
-        break;
-    }
-  }
-
   handleChange = event => {
-    this.setState({ role: event.target.value });
+    this.setState({
+      roleName: event.target.value
+    });
   };
 
   componentDidMount() {
-    this.fixRole();
     this.getRoles();
   }
 
@@ -65,13 +46,13 @@ class UserCard extends Component {
   }
 
   handleSubmit = () => {
-    const { id, role } = this.state;
+    const { id, roleName } = this.state;
     fetch(`http://localhost:5000/assignRole`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ id, role })
+      body: JSON.stringify({ id, roleName })
     })
       .then(res => res.json())
       .then(this.setState({ isOpen: true }));
@@ -92,9 +73,7 @@ class UserCard extends Component {
                   {this.state.firstName + ' ' + this.state.lastName}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <Typography>{this.state.formattedRole}</Typography>
-              </Grid>
+              <Grid item xs={12} sm={6}></Grid>
               <Grid item xs={12} sm={6}>
                 <Typography>
                   {this.state.roleName ? (
@@ -120,7 +99,7 @@ class UserCard extends Component {
                     name="position"
                     onChange={this.handleChange}
                     row
-                    value={this.state.role}
+                    value={this.state.roleName}
                   >
                     {this.state.roleList.map(obj => (
                       <FormControlLabel
